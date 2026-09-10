@@ -57,10 +57,57 @@ def chunk_text(text: str, chunk_size: int=1000, overlap: int=200) -> list[str]:
     return chunks
 
 
+def split_into_chapters(
+    text: str,
+    part_headings: list[str],
+    chapter_headings: list[str]
+) -> list[dict]:
+    """
+    split the book text into a list of dictionaries where
+    each dictionary represents a part of a chapter
+    """
+    chapters = []
+
+    current_part = None
+    current_chapter = None
+    current_text = []
+
+    for line in text.splitlines(): # break the entire book text into a list of lines
+        stripped = line.strip()
+
+        if stripped in part_headings: 
+            current_part = stripped
+            continue # move on to the next line
+
+        if stripped in chapter_headings:
+            if current_chapter is not None:
+                chapters.append({
+                    "part": current_part,
+                    "current_chapter": current_chapter,
+                    "text": "\n".join(current_text).strip()
+                })
+
+            current_chapter = stripped
+            current_text = []
+            continue
+
+        if current_chapter is not None:
+            current_text.append(line)
+        
+    if current_chapter is not None:
+        chapters.append({
+            "part": current_part,
+            "current_chapter": current_chapter,
+            "text": "\n".join(current_text).strip()
+        })
+
+    return chapters
+
+
 # check if the embeddings for each chunk exists:
 
 def load_or_create_embeddings(
-    chunks: list[str], 
+    chunks: list[dict], 
     client: OpenAI,
     embeddings_path: str="chunk_embeddings.json") -> list[list]:
     """
@@ -76,10 +123,11 @@ def load_or_create_embeddings(
     else:
 
     # create an embedding for each chunk (if it does not exist)
+        chunk_texts = [chunk["text"] for chunk in chunks]
 
         response = client.embeddings.create(
             model="text-embedding-3-small",
-            input=chunks
+            input=chunk_texts
         )
 
         chunk_embeddings = [

@@ -8,7 +8,8 @@ def build_context(top_chunks: list[tuple]) -> str:
 
     for score, i, chunk in top_chunks:
         context_parts.append(
-            f"[Source {i}]\n{chunk}"
+            f"[Source {i}] | {chunk['part']} | Chapter {chunk['chapter']}]\n"
+            f"{chunk['text']}"
         )
 
     return "\n\n---\n\n".join(context_parts)
@@ -28,7 +29,9 @@ client: OpenAI) -> str:
 
         Use the retrieved passages below as your primary evidence.
 
-        When making claims supported by a retrieved passage, cite the relevant source using its label, e.g. '[Source 147]'
+        When making claims supported by a retrieved passage, cite the relevant source using its label
+        
+        i.e. '[Source | Part | Chapter]'
 
         If the passages do not contain enough information to answer confidently, say so.
 
