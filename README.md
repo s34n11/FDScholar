@@ -1,9 +1,9 @@
 
 # FDScholar
 
-FDScholar is a Retrieval-Augmented Generation (RAG) assistant designed to help readers explore and better understand the literary and philosophical works of Fyodor Dostoyevsky.
+FDScholar is a Retrieval-Augmented Generation (RAG) assistant designed to help readers explore and better understand the works of the great Fyodor Dostoyevsky.
 
-Currently, the project focuses on *Notes from Underground*, allowing users to ask questions about the text and receive contextually relevant, AI-generated responses grounded in the novel.
+Currently, the project focuses on *Notes from Underground*, allowing users to ask questions about the text and receive contextually relevant, AI-generated responses grounded in the novel's passages.
 
 ## How It Works
 
